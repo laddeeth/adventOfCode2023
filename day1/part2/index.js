@@ -13,13 +13,13 @@ let sum = 0;
 let thisline;
 myInterface.on('line', function (line) {
   lineno++;
-  let firstOcc = toNumber(line.match(regX)[0]);
-  let secondOcc = toNumber(reverseString(reverseString(line).match(regRevX)[0]));
-  thisline = parseInt(firstOcc + "" + secondOcc);
+  let firstOccurance = toNumber(line.match(regX)[0]);
+  let lastOccurance = toNumber(
+    reverseString(reverseString(line).match(regRevX)[0])
+  );
+  thisline = parseInt(firstOccurance + '' + lastOccurance);
   sum += thisline;
   console.log(sum);
-
-
 });
 
 function toNumber(a) {
@@ -57,13 +57,11 @@ function toNumber(a) {
 }
 
 function reverseString(str) {
-
-  var splitString = str.toString().split("");
+  var splitString = str.toString().split('');
 
   var reverseArray = splitString.reverse();
 
-  var joinArray = reverseArray.join("");
-  
+  var joinArray = reverseArray.join('');
+
   return joinArray;
 }
-
