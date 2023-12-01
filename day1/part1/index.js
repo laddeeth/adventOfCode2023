@@ -2,7 +2,7 @@ let readline = require('readline');
 let fs = require('fs');
 
 let myInterface = readline.createInterface({
-  input: fs.createReadStream("day1\/part1\/input.txt"),
+  input: fs.createReadStream('day1/part1/input.txt'),
 });
 
 let regX = /\d/g;
