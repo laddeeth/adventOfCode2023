@@ -5,17 +5,20 @@ let myInterface = readline.createInterface({
   input: fs.createReadStream('day1/part2/input.txt'),
 });
 
-let regX = /(one|two|three|four|five|six|seven|eight|nine|\d)/g;
+let regX = /(one|two|three|four|five|six|seven|eight|nine|\d)/;
+let regRevX = /(eno|owt|eerht|ruof|evif|xis|neves|thgie|enin|\d)/;
 
 let lineno = 0;
 let sum = 0;
 let thisline;
 myInterface.on('line', function (line) {
   lineno++;
-  let digits = line.match(regX);
-  //thisline = parseInt(toNumber(digits[0]) + "" + toNumber(digits.pop()));
- // sum += thisline;
-  if(lineno == 924) console.log(lineno + ": " + digits);
+  let firstOcc = toNumber(line.match(regX)[0]);
+  let secondOcc = toNumber(reverseString(reverseString(line).match(regRevX)[0]));
+  thisline = parseInt(firstOcc + "" + secondOcc);
+  sum += thisline;
+  console.log(sum);
+
 
 });
 
@@ -52,3 +55,15 @@ function toNumber(a) {
       return a;
   }
 }
+
+function reverseString(str) {
+
+  var splitString = str.toString().split("");
+
+  var reverseArray = splitString.reverse();
+
+  var joinArray = reverseArray.join("");
+  
+  return joinArray;
+}
+
