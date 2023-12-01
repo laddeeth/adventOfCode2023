@@ -15,7 +15,7 @@ myInterface.on('line', function (line) {
   let digits = line.match(regX);
   //thisline = parseInt(toNumber(digits[0]) + "" + toNumber(digits.pop()));
  // sum += thisline;
-  console.log(lineno + ": " + digits);
+  if(lineno == 924) console.log(lineno + ": " + digits);
 
 });
 
