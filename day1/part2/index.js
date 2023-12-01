@@ -5,7 +5,7 @@ let myInterface = readline.createInterface({
   input: fs.createReadStream("day1\/part2\/input.txt"),
 });
 
-let regX = /\d/g;
+let regX = /one|two|three|four|five|six|seven|eight|nine|\d/g;
 
 let lineno = 0;
 let sum = 0;
