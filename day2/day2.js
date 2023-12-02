@@ -107,9 +107,9 @@ let regexRed = /\d+ red/g;
 let regexBlue = /\d+ blue/g;
 let regexGame = /Game \d+/g;
 
-workingGames();
+part1();
 
-function workingGames() {
+function part1() {
     let maxGreen = 13;
     let maxRed = 12;
     let maxBlue = 14;
