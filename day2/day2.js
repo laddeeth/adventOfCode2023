@@ -108,6 +108,7 @@ let regexBlue = /\d+ blue/g;
 let regexGame = /Game \d+/g;
 
 part1();
+part2();
 
 function part1() {
     let maxGreen = 13;
@@ -156,6 +157,38 @@ function part1() {
     console.log(sumOfGames);
 }
 
-
-
-
+function part2() {
+    let powerOfColors = 0;
+    for (x in puzzleArray) {
+        let minGreen = 0;
+        let minRed = 0;
+        let minBlue = 0;
+        
+        //check minGreen
+        let temp = puzzleArray[x].match(regexGreen);
+        temp.forEach((x) => {
+            if (parseInt(x.replace(/\D/g, '')) > minGreen) {
+                minGreen = parseInt(x.replace(/\D/g, ''));
+            }
+        });
+        
+        //check minRed
+        temp = puzzleArray[x].match(regexRed);
+        temp.forEach((x) => {
+            if (parseInt(x.replace(/\D/g, '')) > minRed) {
+                minRed = parseInt(x.replace(/\D/g, ''));
+            }
+        });
+        
+        //check minBlue
+        temp = puzzleArray[x].match(regexBlue);
+        temp.forEach((x) => {
+            if (parseInt(x.replace(/\D/g, '')) > minBlue) {
+                minBlue = parseInt(x.replace(/\D/g, ''));
+            }
+        });
+        
+        powerOfColors += minGreen*minRed*minBlue;
+    }
+    console.log(powerOfColors);
+}
