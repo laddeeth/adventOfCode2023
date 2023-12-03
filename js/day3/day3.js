@@ -141,7 +141,7 @@ let puzzleInput = `....573.613.........965............691......892..948.......96
 
 const puzzleArray = puzzleInput.split('\n');
 
-part1();
+part2();
 
 function part1() {
   const regexp = /\d+/g;
@@ -213,4 +213,164 @@ function part1() {
   }
 
   console.log(sumOfParts);
+}
+
+function part2() {
+  const regexp = /\*/g;
+  let sumOfGears = 0;
+
+  for (let i = 0; i < puzzleArray.length; i++) {
+    const matches = puzzleArray[i].matchAll(regexp);
+    for (const match of matches) {
+      let digitsArray = [];
+      let before = match.index - 1;
+      let after = match.index + 1;
+      let above = i - 1;
+      let below = i + 1;
+
+      //Check before
+      if (before >= 0) {
+        if (/[0-9]/.test(puzzleArray[i][before])) {
+          while (/[0-9]/.test(puzzleArray[i][before - 1])) {
+            before--;
+            if (before < 0) {
+              before = 0;
+              break;
+            }
+          }
+          let end = before;
+          let digits = '';
+          while (/[0-9]/.test(puzzleArray[i][end + 1])) {
+            end++;
+            if (end > 139) {
+              end = 139;
+              break;
+            }
+          }
+          for (let x = before; x <= end; x++) {
+            digits += puzzleArray[i][x];
+          }
+          digitsArray.push(digits);
+        }
+      }
+      //check after
+      if (after < puzzleArray.length) {
+        if (/[0-9]/.test(puzzleArray[i][after])) {
+          let beginning = after;
+          while (/[0-9]/.test(puzzleArray[i][after + 1])) {
+            after++;
+          }
+
+          let digits = '';
+
+          for (let x = beginning; x <= after; x++) {
+            digits += puzzleArray[i][x];
+          }
+          digitsArray.push(digits);
+        }
+      }
+      //check above
+      let start = -5;
+      before = match.index - 1;
+      after = match.index + 1;
+      let end;
+
+      if (above >= 0) {
+        for (let i = before; i <= after; i++) {
+          if (/[0-9]/.test(puzzleArray[above][i])) {
+            start = i;
+            break;
+          }
+        }
+
+        if (start !== -5) {
+          if (start > 0) {
+            while (/[0-9]/.test(puzzleArray[above][start - 1])) {
+              start--;
+            }
+          }
+
+          end = start;
+          while (/[0-9]/.test(puzzleArray[above][end + 1])) {
+            end++;
+          }
+
+          let digits = '';
+
+          for (let x = start; x <= end; x++) {
+            digits += puzzleArray[above][x];
+          }
+          digitsArray.push(digits);
+        }
+        if (end == before && /[0-9]/.test(puzzleArray[above][after])) {
+          start = after;
+          end = start;
+          while (/[0-9]/.test(puzzleArray[above][end + 1])) {
+            end++;
+          }
+
+          let digits = '';
+
+          for (let x = start; x <= end; x++) {
+            digits += puzzleArray[above][x];
+          }
+          digitsArray.push(digits);
+        }
+      }
+
+      //check below
+      start = -5;
+      before = match.index - 1;
+      after = match.index + 1;
+
+      if (below < puzzleArray.length) {
+        for (let i = before; i <= after; i++) {
+          if (/[0-9]/.test(puzzleArray[below][i])) {
+            start = i;
+            break;
+          }
+        }
+
+        if (start !== -5) {
+          if (start > 0) {
+            while (/[0-9]/.test(puzzleArray[below][start - 1])) {
+              start--;
+            }
+          }
+
+          end = start;
+          while (/[0-9]/.test(puzzleArray[below][end + 1])) {
+            end++;
+          }
+
+          let digits = '';
+
+          for (let x = start; x <= end; x++) {
+            digits += puzzleArray[below][x];
+          }
+          digitsArray.push(digits);
+        }
+        if (before == end) {
+          start = after;
+          if (/[0-9]/.test(puzzleArray[below][after])) {
+            end = start;
+            while (/[0-9]/.test(puzzleArray[below][end])) {
+              end++;
+            }
+            let digits = '';
+
+            for (let x = start; x <= end; x++) {
+              digits += puzzleArray[below][x];
+            }
+            digitsArray.push(parseInt(digits));
+          }
+        }
+      }
+
+      if (digitsArray.length == 2) {
+        sumOfGears += digitsArray[0] * digitsArray[1];
+      }
+    }
+  }
+  console.log(sumOfGears);
 }
