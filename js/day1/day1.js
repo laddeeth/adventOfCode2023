@@ -15,7 +15,10 @@ function part1() {
 function part2() {
   let myInterface = getInput();
 
-  let regX = new RegExp(/(one|two|three|four|five|six|seven|eight|nine|\d)/);
+  let regX = new RegExp(
+    /(?=(one|two|three|four|five|six|seven|eight|nine|\\d))/,
+    'g'
+  );
   let regRevX = new RegExp(/(eno|owt|eerht|ruof|evif|xis|neves|thgie|enin|\d)/);
 
   let lineno = 0;
@@ -23,13 +26,14 @@ function part2() {
   let thisline;
   myInterface.on('line', function (line) {
     lineno++;
-    let firstOccurance = toNumber(line.match(regX)[0]);
-    let lastOccurance = toNumber(
-      reverseString(reverseString(line).match(regRevX)[0])
-    );
-    thisline = parseInt(firstOccurance + '' + lastOccurance);
-    sum += thisline;
-    console.log(sum);
+    // let firstOccurance = toNumber(line.match(regX)[0]);
+    // let lastOccurance = toNumber(
+    //   reverseString(reverseString(line).match(regRevX)[0])
+    // );
+
+    // thisline = parseInt(firstOccurance + '' + lastOccurance);
+    // sum += thisline;
+    console.log('oneight'.match(regX));
   });
 }
 
