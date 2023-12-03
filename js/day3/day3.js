@@ -1,5 +1,3 @@
-const { start } = require('repl');
-
 let puzzleInput = `....573.613.........965............691......892..948.......964........439.375..................320......273...........352.284...............
 .......*.............*.....814...............$....*........../..94......*....=.............103............/..882*...........+...............
 ...........328....598.....*........................819...................199........60*132..@....................685..........6.........493.
@@ -142,24 +140,77 @@ let puzzleInput = `....573.613.........965............691......892..948.......96
 .341...........122.730.............890......20..570....64...22..........................................146............................479..`;
 
 const puzzleArray = puzzleInput.split('\n');
-let rowNo = 0;
-const regexp = /\d+/g;
-let sumOfParts = 0;
 
-for (x in puzzleArray) {
-  const matches = puzzleArray[x].matchAll(regexp);
-  for (const match of matches) {
-    console.log(
-      'Row:',
-      x,
-      'StartIndex:',
-      match.index,
-      'Length:',
-      match[0].length,
-      'Value',
-      match[0]
-    );
+part1();
+
+function part1() {
+  const regexp = /\d+/g;
+  let sumOfParts = 0;
+
+  for (let i = 0; i < puzzleArray.length; i++) {
+    const matches = puzzleArray[i].matchAll(regexp);
+    for (const match of matches) {
+      let before = match.index - 1;
+      let after = match.index + match[0].length;
+      let above = i - 1;
+      let below = i + 1;
+
+      let isValid = false;
+
+      //Check before
+      if (before >= 0) {
+        isValid = puzzleArray[i][before] !== '.' ? true : isValid;
+      }
+
+      //Check after
+      if (!isValid && after < puzzleArray[i].length) {
+        isValid = puzzleArray[i][after] !== '.' ? true : isValid;
+      }
+      while (before < 0) {
+        before++;
+      }
+      while (after > puzzleArray[i].length - 1) {
+        after--;
+      }
+      //Check above
+      if (!isValid && above >= 0) {
+        for (let i = before; i <= after; i++) {
+          isValid = puzzleArray[above][i] !== '.' ? true : isValid;
+        }
+      }
+      //Check below
+      if (!isValid && below < puzzleArray.length) {
+        for (let i = before; i <= after; i++) {
+          isValid = puzzleArray[below][i] !== '.' ? true : isValid;
+        }
+      }
+
+      if (isValid) {
+        sumOfParts += parseInt(match[0]);
+      }
+
+      // console.log(
+      //   'Rowindex:',
+      //   i,
+      //   'StartIndex:',
+      //   match.index,
+      //   'Length:',
+      //   match[0].length,
+      //   'Value:',
+      //   match[0],
+      //   'Before:',
+      //   before,
+      //   'After:',
+      //   after,
+      //   'SumOfParts:',
+      //   sumOfParts,
+      //   'Character Before:',
+      //   puzzleArray[i][before],
+      //   'Character After:',
+      //   puzzleArray[i][after]
+      // );
+    }
   }
-}
 
-console.log(sumOfParts);
+  console.log(sumOfParts);
+}
