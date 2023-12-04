@@ -1,9 +1,3 @@
-//----------------More modern way to compare arrays
-//const arr1 = [1, 2, 3, 4, 5];
-//const arr2 = [3, 4, 5, 6, 7];
-//const commonElements = arr1.filter(element => arr2.includes(element));
-//console.log(commonElements); // Output: [3, 4, 5]
-
 //Read input and split by row into array
 const fs = require('fs');
 const buffer = fs.readFileSync('js/day4/input.txt');
@@ -41,13 +35,11 @@ function part1() {
 
     //Find matches
     let totalMatches = 0;
-    for (let x = 0; x < winningArray.length; x++) {
-      for (let y = 0; y < myNumbersArray.length; y++) {
-        if (winningArray[x] == myNumbersArray[y]) {
-          totalMatches++;
-        }
-      }
-    }
+
+    const commonElements = winningArray.filter((element) =>
+      myNumbersArray.includes(element)
+    );
+    totalMatches = commonElements.length;
 
     //Calculate points
     let points = parseInt(2 ** (totalMatches - 1));
@@ -85,13 +77,11 @@ function part2() {
     }
     //Find matches
     let totalMatches = 0;
-    for (let x = 0; x < winningArray.length; x++) {
-      for (let y = 0; y < myNumbersArray.length; y++) {
-        if (winningArray[x] == myNumbersArray[y]) {
-          totalMatches++;
-        }
-      }
-    }
+
+    const commonElements = winningArray.filter((element) =>
+      myNumbersArray.includes(element)
+    );
+    totalMatches = commonElements.length;
     matchArray.push([x, totalMatches]);
   }
   //Calculate total copies
