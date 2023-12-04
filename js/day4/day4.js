@@ -1,3 +1,9 @@
+//----------------More modern way to compare arrays
+//const arr1 = [1, 2, 3, 4, 5];
+//const arr2 = [3, 4, 5, 6, 7];
+//const commonElements = arr1.filter(element => arr2.includes(element));
+//console.log(commonElements); // Output: [3, 4, 5]
+
 //Read input and split by row into array
 const fs = require('fs');
 const buffer = fs.readFileSync('js/day4/input.txt');
