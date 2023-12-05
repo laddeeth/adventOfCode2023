@@ -380,8 +380,17 @@ function part2() {
             startMap + difference,
             parseInt(mapElement[2]),
           ]);
-          // } else if (startArray >= startMap && endArray <= endMap) {
-          //   console.log('VAAAAAAAAAAAAFAAAAAAAAAAAAAN');
+        } else if (startArray >= startMap && endArray <= endMap) {
+          console.log(
+            'StartArray:',
+            startArray,
+            'endArray:',
+            endArray,
+            'startMap:',
+            startMap,
+            'endMap:',
+            endMap
+          );
         }
       });
     });
