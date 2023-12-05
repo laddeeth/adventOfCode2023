@@ -1,6 +1,8 @@
 // Read input and set all arrays
 // Map structure [destination, source, range]
 
+const { start } = require('repl');
+
 const inputText = `seeds: 1132132257 323430997 2043754183 4501055 2539071613 1059028389 1695770806 60470169 2220296232 251415938 1673679740 6063698 962820135 133182317 262615889 327780505 3602765034 194858721 2147281339 37466509
 
 seed-to-soil map:
@@ -307,7 +309,7 @@ const lightToTemperatureMap = setMap(5);
 const temperatureToHumidityMap = setMap(6);
 const humidityToLocationMap = setMap(7);
 
-part2();
+part1();
 function part1() {
   let nextLocationArray = getNextLocations(seedArray, seedToSoilMap);
   nextLocationArray = getNextLocations(nextLocationArray, soilToFertilizerMap);
@@ -329,86 +331,7 @@ function part1() {
 }
 
 //Map structure [destination, source, range]
-function part2() {
-  const newSeedArray = [...newInitialSeedArray(seedArray)];
-  let nextSeedArray = [];
-  nextSeedArray = getNewLocation(newSeedArray, seedToSoilMap);
-
-  nextSeedArray = getNewLocation(nextSeedArray, soilToFertilizerMap);
-  nextSeedArray = getNewLocation(nextSeedArray, fertilizerToWaterMap);
-  nextSeedArray = getNewLocation(nextSeedArray, waterToLightMap);
-  nextSeedArray = getNewLocation(nextSeedArray, lightToTemperatureMap);
-  nextSeedArray = getNewLocation(nextSeedArray, temperatureToHumidityMap);
-  nextSeedArray = getNewLocation(nextSeedArray, humidityToLocationMap);
-
-  let minLocation = Number.MAX_SAFE_INTEGER;
-
-  nextSeedArray.forEach((seedLocation) => {
-    if (seedLocation[0] < minLocation) {
-      minLocation = seedLocation[0];
-    }
-  });
-
-  console.log(minLocation);
-
-  function getNewLocation(searchArray, searchMap) {
-    let nextLocationArray = [];
-    let tempArray = [...searchArray];
-    let tempMap = [...searchMap];
-    //Map structure [destination, source, range]
-    tempMap.forEach((mapElement) => {
-      tempArray.forEach((inputElement) => {
-        let difference = parseInt(mapElement[0]) - parseInt(mapElement[1]);
-        let startMap = parseInt(mapElement[1]); //5
-        let endMap = parseInt(mapElement[1]) + parseInt(mapElement[2]) - 1; //9
-        let startArray = inputElement[0]; //2
-        let endArray =
-          inputElement[0] + inputElement[1] - 1 + parseInt(mapElement[2]) - 1; //11
-
-        if (startArray >= startMap && endArray >= endMap) {
-          nextLocationArray.push([
-            startArray + difference,
-            endMap - startArray + 1,
-          ]);
-        } else if (startArray <= startMap && endArray <= endMap) {
-          nextLocationArray.push([
-            difference + startMap,
-            endArray - startMap + 1,
-          ]);
-        } else if (startArray <= startMap && endArray >= endMap) {
-          nextLocationArray.push([
-            startMap + difference,
-            parseInt(mapElement[2]),
-          ]);
-        } else if (startArray >= startMap && endArray <= endMap) {
-          console.log(
-            'StartArray:',
-            startArray,
-            'endArray:',
-            endArray,
-            'startMap:',
-            startMap,
-            'endMap:',
-            endMap
-          );
-        }
-      });
-    });
-    return [...nextLocationArray];
-  }
-
-  function newInitialSeedArray(seedArray) {
-    let tempArray = [];
-    let x = 0;
-    while (x < seedArray.length) {
-      let start = parseInt(seedArray[x]);
-      let end = parseInt(seedArray[x]) + parseInt(seedArray[x + 1]);
-      tempArray.push([start, end - start]);
-      x += 2;
-    }
-    return tempArray;
-  }
-}
+function part2() {}
 
 function getNextLocations(searchArray, searchMap) {
   let nextLocationArray = [];
