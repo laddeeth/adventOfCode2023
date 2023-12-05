@@ -1,7 +1,7 @@
-//Read input and set all arrays
-//Map structure [destination, source, range]
+// Read input and set all arrays
+// Map structure [destination, source, range]
 
-inputText = `seeds: 1132132257 323430997 2043754183 4501055 2539071613 1059028389 1695770806 60470169 2220296232 251415938 1673679740 6063698 962820135 133182317 262615889 327780505 3602765034 194858721 2147281339 37466509
+const inputText = `seeds: 1132132257 323430997 2043754183 4501055 2539071613 1059028389 1695770806 60470169 2220296232 251415938 1673679740 6063698 962820135 133182317 262615889 327780505 3602765034 194858721 2147281339 37466509
 
 seed-to-soil map:
 1280158874 0 45923291
@@ -256,6 +256,40 @@ humidity-to-location map:
 58880743 755780198 186663599
 2208366309 3745872876 74630643`;
 
+// const inputText = `seeds: 79 14 55 13
+
+// seed-to-soil map:
+// 50 98 2
+// 52 50 48
+
+// soil-to-fertilizer map:
+// 0 15 37
+// 37 52 2
+// 39 0 15
+
+// fertilizer-to-water map:
+// 49 53 8
+// 0 11 42
+// 42 0 7
+// 57 7 4
+
+// water-to-light map:
+// 88 18 7
+// 18 25 70
+
+// light-to-temperature map:
+// 45 77 23
+// 81 45 19
+// 68 64 13
+
+// temperature-to-humidity map:
+// 0 69 1
+// 1 0 69
+
+// humidity-to-location map:
+// 60 56 37
+// 56 93 4`;
+
 const inputArray = inputText.split('\n\n');
 //Set seedarray
 const seedArray = inputArray[0]
@@ -263,8 +297,7 @@ const seedArray = inputArray[0]
   .replace(/\D+/g, ' ')
   .trim()
   .split(' ');
-
-//Set All Maps
+// Set All Maps
 const seedToSoilMap = setMap(1);
 const soilToFertilizerMap = setMap(2);
 const fertilizerToWaterMap = setMap(3);
@@ -297,34 +330,50 @@ function part1() {
 //Map structure [destination, source, range]
 function part2() {
   const newSeedArray = [...newInitialSeedArray(seedArray)];
-
   let nextSeedArray = [];
   nextSeedArray = getNewLocation(newSeedArray, seedToSoilMap);
+
   nextSeedArray = getNewLocation(nextSeedArray, soilToFertilizerMap);
   nextSeedArray = getNewLocation(nextSeedArray, fertilizerToWaterMap);
   nextSeedArray = getNewLocation(nextSeedArray, waterToLightMap);
   nextSeedArray = getNewLocation(nextSeedArray, lightToTemperatureMap);
   nextSeedArray = getNewLocation(nextSeedArray, temperatureToHumidityMap);
   nextSeedArray = getNewLocation(nextSeedArray, humidityToLocationMap);
-  console.log(nextSeedArray);
+
+  let minLocation = Number.MAX_SAFE_INTEGER;
+
+  nextSeedArray.forEach((seedLocation) => {
+    if (seedLocation[0] < minLocation) {
+      minLocation = seedLocation[0];
+    }
+  });
+
+  console.log(minLocation);
 
   function getNewLocation(searchArray, searchMap) {
     let nextLocationArray = [];
     let tempArray = [...searchArray];
     let tempMap = [...searchMap];
-
+    //Map structure [destination, source, range]
     tempMap.forEach((mapElement) => {
       tempArray.forEach((inputElement) => {
-        let startMap = parseInt(mapElement[1]);
-        let endMap = parseInt(mapElement[1]) + parseInt(mapElement[2]);
-        let startArray = inputElement[0];
+        let difference = parseInt(mapElement[0]) - parseInt(mapElement[1]);
+        let startMap = parseInt(mapElement[1]); //5
+        let endMap = parseInt(mapElement[1]) + parseInt(mapElement[2]) - 1; //9
+        let startArray = inputElement[0]; //2
         let endArray =
-          inputElement[0] + inputElement[1] + parseInt(mapElement[2]);
+          inputElement[0] + inputElement[1] - 1 + parseInt(mapElement[2]) - 1; //11
 
         if (startArray >= startMap && startArray <= endMap) {
-          nextLocationArray.push([startArray, endMap - startArray]);
-        } else if (endArray >= startMap && endArray <= endMap) {
-          nextLocationArray.push([startMap, endArray - startMap]);
+          nextLocationArray.push([
+            startArray + difference,
+            endMap - startArray,
+          ]);
+        } else if (endArray >= startMap && startArray <= endMap) {
+          nextLocationArray.push([
+            difference + startMap,
+            endMap - endArray - 1,
+          ]);
         }
       });
     });
@@ -337,7 +386,7 @@ function part2() {
     while (x < seedArray.length) {
       let start = parseInt(seedArray[x]);
       let end = parseInt(seedArray[x]) + parseInt(seedArray[x + 1]);
-      tempArray.push([start, end]);
+      tempArray.push([start, end - start]);
       x += 2;
     }
     return tempArray;
