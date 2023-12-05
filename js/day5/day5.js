@@ -293,8 +293,55 @@ function part1() {
   );
   console.log(Math.min(...nextLocationArray));
 }
+
+//Map structure [destination, source, range]
 function part2() {
-  console.log(seedArray);
+  const newSeedArray = [...newInitialSeedArray(seedArray)];
+
+  let nextSeedArray = [];
+  nextSeedArray = getNewLocation(newSeedArray, seedToSoilMap);
+  nextSeedArray = getNewLocation(nextSeedArray, soilToFertilizerMap);
+  nextSeedArray = getNewLocation(nextSeedArray, fertilizerToWaterMap);
+  nextSeedArray = getNewLocation(nextSeedArray, waterToLightMap);
+  nextSeedArray = getNewLocation(nextSeedArray, lightToTemperatureMap);
+  nextSeedArray = getNewLocation(nextSeedArray, temperatureToHumidityMap);
+  nextSeedArray = getNewLocation(nextSeedArray, humidityToLocationMap);
+  console.log(nextSeedArray);
+
+  function getNewLocation(searchArray, searchMap) {
+    let nextLocationArray = [];
+    let tempArray = [...searchArray];
+    let tempMap = [...searchMap];
+
+    tempMap.forEach((mapElement) => {
+      tempArray.forEach((inputElement) => {
+        let startMap = parseInt(mapElement[1]);
+        let endMap = parseInt(mapElement[1]) + parseInt(mapElement[2]);
+        let startArray = inputElement[0];
+        let endArray =
+          inputElement[0] + inputElement[1] + parseInt(mapElement[2]);
+
+        if (startArray >= startMap && startArray <= endMap) {
+          nextLocationArray.push([startArray, endMap - startArray]);
+        } else if (endArray >= startMap && endArray <= endMap) {
+          nextLocationArray.push([startMap, endArray - startMap]);
+        }
+      });
+    });
+    return [...nextLocationArray];
+  }
+
+  function newInitialSeedArray(seedArray) {
+    let tempArray = [];
+    let x = 0;
+    while (x < seedArray.length) {
+      let start = parseInt(seedArray[x]);
+      let end = parseInt(seedArray[x]) + parseInt(seedArray[x + 1]);
+      tempArray.push([start, end]);
+      x += 2;
+    }
+    return tempArray;
+  }
 }
 
 function getNextLocations(searchArray, searchMap) {
