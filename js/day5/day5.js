@@ -47,22 +47,22 @@ const seedArray = inputArray[0]
   .trim()
   .split(' ');
 
-//Set seedToSoilMap
+//Set All Maps
+const seedToSoilMap = setMap(1);
+const soilToFertilizerMap = setMap(2);
+const fertilizerToWaterMap = setMap(3);
+const waterToLightMap = setMap(4);
+const lightToTemperatureMap = setMap(5);
+const temperatureToHumidityMap = setMap(6);
+const humidityToLocationMap = setMap(7);
+console.log(humidityToLocationMap);
 
-let temp = [];
-let tempArray = [];
-for (let x = 1; x < inputArray[1].split('\n').length; x++) {
-  temp = inputArray[1].split('\n')[x].split(' ');
-  tempArray.push(temp);
+function setMap(index) {
+  temp = [];
+  tempArray = [];
+  for (let x = 1; x < inputArray[index].split('\n').length; x++) {
+    temp = inputArray[index].split('\n')[x].split(' ');
+    tempArray.push(temp);
+  }
+  return tempArray;
 }
-const seedToSoilMap = [...tempArray];
-
-//set soilToFertilizerMap
-temp = [];
-tempArray = [];
-for (let x = 1; x < inputArray[2].split('\n').length; x++) {
-  temp = inputArray[2].split('\n')[x].split(' ');
-  tempArray.push(temp);
-}
-const soilToFertilizerMap = [...tempArray];
-console.log(soilToFertilizerMap);
