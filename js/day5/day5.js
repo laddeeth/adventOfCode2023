@@ -5,7 +5,7 @@
 
 //Map structure [destination, source, range]
 //Using smaller sampleArray first
-inputText = `seeds: 79 14 55 13
+inputText = `seeds: 14 79 55 13
 
 seed-to-soil map:
 50 98 2
@@ -55,7 +55,36 @@ const waterToLightMap = setMap(4);
 const lightToTemperatureMap = setMap(5);
 const temperatureToHumidityMap = setMap(6);
 const humidityToLocationMap = setMap(7);
-console.log(humidityToLocationMap);
+
+console.log(seedArray);
+let nextLocationArray = getNextLocations(seedArray, seedToSoilMap);
+console.log(nextLocationArray);
+nextLocationArray = getNextLocations(nextLocationArray, soilToFertilizerMap);
+console.log(nextLocationArray);
+
+function getNextLocations(searchArray, searchMap) {
+  let nextLocationArray = [];
+  let tempArray = [...searchArray];
+  let tempMap = [...searchMap];
+  tempArray.forEach((element) => {
+    let found = false;
+    let x = 0;
+
+    while (!found && x < tempMap.length) {
+      let start = parseInt(tempMap[x][1]);
+      let end = parseInt(tempMap[x][1]) + parseInt(tempMap[x][2]);
+      found =
+        start <= parseInt(element) && parseInt(element) <= end ? true : false;
+
+      if (found) {
+        let nextLocation = parseInt(element) + parseInt(tempMap[x][0]) - start;
+        nextLocationArray.push('' + nextLocation + '');
+      }
+      x++;
+    }
+  });
+  return nextLocationArray;
+}
 
 function setMap(index) {
   temp = [];
