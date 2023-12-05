@@ -297,6 +297,7 @@ const seedArray = inputArray[0]
   .replace(/\D+/g, ' ')
   .trim()
   .split(' ');
+
 // Set All Maps
 const seedToSoilMap = setMap(1);
 const soilToFertilizerMap = setMap(2);
@@ -364,16 +365,23 @@ function part2() {
         let endArray =
           inputElement[0] + inputElement[1] - 1 + parseInt(mapElement[2]) - 1; //11
 
-        if (startArray >= startMap && startArray <= endMap) {
+        if (startArray >= startMap && endArray >= endMap) {
           nextLocationArray.push([
             startArray + difference,
-            endMap - startArray,
+            endMap - startArray + 1,
           ]);
-        } else if (endArray >= startMap && startArray <= endMap) {
+        } else if (startArray <= startMap && endArray <= endMap) {
           nextLocationArray.push([
             difference + startMap,
-            endMap - endArray - 1,
+            endArray - startMap + 1,
           ]);
+        } else if (startArray <= startMap && endArray >= endMap) {
+          nextLocationArray.push([
+            startMap + difference,
+            parseInt(mapElement[2]),
+          ]);
+          // } else if (startArray >= startMap && endArray <= endMap) {
+          //   console.log('VAAAAAAAAAAAAFAAAAAAAAAAAAAN');
         }
       });
     });
