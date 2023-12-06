@@ -346,24 +346,34 @@ function part2() {
         let endMap = parseInt(mapElement[1]) + parseInt(mapElement[2]) - 1;
         let difference = parseInt(mapElement[0]) - parseInt(mapElement[1]);
 
-        //Array---[***]---------------------------------------------------
-        //Map------------[******]-----------------------------------------
-        if (endArray < startMap) {
-          nextLocationArray.push(arrayElement);
-        }
-        //Array--------[***]----------------
-        //Map-------[*********}-------------
-        else if (startArray >= startMap && endArray <= endMap) {
-          nextLocationArray.push([startArray + difference, arrayElement[1]]);
-        }
-        //Array-----------------[***]--------------
-        //Map-------[******]-----------------------
-        else if (startArray > endMap) {
-          nextLocationArray.push(arrayElement);
-        }
-        //Array-----[******]-----------------------
-        //Map-----------[*******]------------------
-        if (startArray <= startMap && endArray >= startMap) {
+        // //Array---[***]---------------------------------------------------
+        // //Map------------[******]-----------------------------------------
+        // if (endArray < startMap) {
+        //   nextLocationArray.push(arrayElement);
+        // }
+        // //Array--------[***]----------------
+        // //Map-------[*********}-------------
+        // else if (startArray >= startMap && endArray <= endMap) {
+        //   nextLocationArray.push([startArray + difference, arrayElement[1]]);
+        // }
+        // //Array-----------------[***]--------------
+        // //Map-------[******]-----------------------
+        // else if (startArray > endMap) {
+        //   nextLocationArray.push(arrayElement);
+        // }
+        // //Array-----[******]-----------------------
+        // //Map-----------[*******]------------------
+        // else if (startArray <= startMap && endArray >= startMap) {
+        //   nextLocationArray.push([startArray, startMap - startArray]);
+        //   nextLocationArray.push([
+        //     startMap + difference,
+        //     endArray - startMap + 1,
+        //   ]);
+        // }
+        //Array----------------[*******]---------------
+        //Map---------------[*******]------------------
+        if (startArray <= endMap && endArray >= endMap) {
+          console.log(true);
         }
       });
     });
