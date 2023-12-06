@@ -296,30 +296,39 @@ function part1() {
 
 function part2() {
   const newSeedArray = [...newInitialSeedArray(seedArray)]; //------[startArray, range]
-  let nextLocationArray = getNewLocation(newSeedArray, seedToSoilMap); //Map structure [destination, source, range]
-  nextLocationArray = getNewLocation(nextLocationArray, soilToFertilizerMap);
-  nextLocationArray = getNewLocation(nextLocationArray, fertilizerToWaterMap);
-  nextLocationArray = getNewLocation(nextLocationArray, waterToLightMap);
-  nextLocationArray = getNewLocation(nextLocationArray, lightToTemperatureMap);
-  nextLocationArray = getNewLocation(
-    nextLocationArray,
-    temperatureToHumidityMap
-  );
-  nextLocationArray = getNewLocation(nextLocationArray, humidityToLocationMap);
+  let nextLocationArray = [...getNewLocation(newSeedArray, seedToSoilMap)]; //Map structure [destination, source, range]
+  nextLocationArray = [
+    ...getNewLocation(nextLocationArray, soilToFertilizerMap),
+  ];
+  nextLocationArray = [
+    ...getNewLocation(nextLocationArray, fertilizerToWaterMap),
+  ];
+  nextLocationArray = [...getNewLocation(nextLocationArray, waterToLightMap)];
+  nextLocationArray = [
+    ...getNewLocation(nextLocationArray, lightToTemperatureMap),
+  ];
+  nextLocationArray = [
+    ...getNewLocation(nextLocationArray, temperatureToHumidityMap),
+  ];
+  nextLocationArray = [
+    ...getNewLocation(nextLocationArray, humidityToLocationMap),
+  ];
 
   let x = 0;
   let answer = Number.MAX_SAFE_INTEGER;
 
   while (x < nextLocationArray.length) {
-    answer =
-      nextLocationArray[x][0] < answer ? nextLocationArray[x][0] : answer;
+    if (nextLocationArray[x][0] !== 0) {
+      answer =
+        nextLocationArray[x][0] < answer ? nextLocationArray[x][0] : answer;
+    }
     x++;
   }
 
   console.log(answer);
 
   function getNewLocation(searchArray, searchMap) {
-    let nextLocationArray = [];
+    let mapLocationArray = [];
     searchArray.forEach((arrayElement) => {
       let tempArray = [];
       let startArray = arrayElement[0];
@@ -368,9 +377,10 @@ function part2() {
       });
 
       tempArray = [...new Set(tempArray)];
-      nextLocationArray.push(...tempArray);
+
+      mapLocationArray.push(...tempArray);
     });
-    return nextLocationArray;
+    return mapLocationArray;
   }
 
   function newInitialSeedArray(seedArray) {
