@@ -1,8 +1,5 @@
 // Read input and set all arrays
 // Map structure [destination, source, range]
-
-const { start } = require('repl');
-
 const inputText = `seeds: 1132132257 323430997 2043754183 4501055 2539071613 1059028389 1695770806 60470169 2220296232 251415938 1673679740 6063698 962820135 133182317 262615889 327780505 3602765034 194858721 2147281339 37466509
 
 seed-to-soil map:
@@ -310,6 +307,7 @@ const temperatureToHumidityMap = setMap(6);
 const humidityToLocationMap = setMap(7);
 
 part2();
+
 function part1() {
   let nextLocationArray = getNextLocations(seedArray, seedToSoilMap);
   nextLocationArray = getNextLocations(nextLocationArray, soilToFertilizerMap);
@@ -334,50 +332,83 @@ function part1() {
 function part2() {
   const newSeedArray = [...newInitialSeedArray(seedArray)];
   let nextLocationArray = getNewLocation(newSeedArray, seedToSoilMap);
-  console.log(nextLocationArray);
+  nextLocationArray = getNewLocation(nextLocationArray, soilToFertilizerMap);
+  nextLocationArray = getNewLocation(nextLocationArray, fertilizerToWaterMap);
+  nextLocationArray = getNewLocation(nextLocationArray, waterToLightMap);
+  nextLocationArray = getNewLocation(nextLocationArray, lightToTemperatureMap);
+  nextLocationArray = getNewLocation(
+    nextLocationArray,
+    temperatureToHumidityMap
+  );
+  nextLocationArray = getNewLocation(nextLocationArray, humidityToLocationMap);
+
+  let x = 0;
+  let answer = Number.MAX_SAFE_INTEGER;
+
+  while (x < nextLocationArray.length) {
+    answer =
+      nextLocationArray[x][0] < answer ? nextLocationArray[x][0] : answer;
+    x++;
+  }
+
+  console.log(answer);
 
   function getNewLocation(searchArray, searchMap) {
     let nextLocationArray = [];
-    searchMap.forEach((mapElement) => {
-      searchArray.forEach((arrayElement) => {
+    searchArray.forEach((arrayElement) => {
+      searchMap.forEach((mapElement) => {
         let startArray = arrayElement[0];
         let endArray = arrayElement[0] + arrayElement[1] - 1;
         let startMap = parseInt(mapElement[1]);
         let endMap = parseInt(mapElement[1]) + parseInt(mapElement[2]) - 1;
         let difference = parseInt(mapElement[0]) - parseInt(mapElement[1]);
 
-        // //Array---[***]---------------------------------------------------
-        // //Map------------[******]-----------------------------------------
-        // if (endArray < startMap) {
-        //   nextLocationArray.push(arrayElement);
-        // }
-        // //Array--------[***]----------------
-        // //Map-------[*********}-------------
-        // else if (startArray >= startMap && endArray <= endMap) {
-        //   nextLocationArray.push([startArray + difference, arrayElement[1]]);
-        // }
-        // //Array-----------------[***]--------------
-        // //Map-------[******]-----------------------
-        // else if (startArray > endMap) {
-        //   nextLocationArray.push(arrayElement);
-        // }
-        // //Array-----[******]-----------------------
-        // //Map-----------[*******]------------------
-        // else if (startArray <= startMap && endArray >= startMap) {
-        //   nextLocationArray.push([startArray, startMap - startArray]);
-        //   nextLocationArray.push([
-        //     startMap + difference,
-        //     endArray - startMap + 1,
-        //   ]);
-        // }
+        //Array---[***]---------------------------------------------------
+        //Map------------[******]-----------------------------------------
+        if (endArray < startMap) {
+          nextLocationArray.push(arrayElement);
+        }
+        //Array--------[***]----------------
+        //Map-------[*********}-------------
+        else if (startArray >= startMap && endArray <= endMap) {
+          nextLocationArray.push([startArray + difference, arrayElement[1]]);
+        }
+        //Array-----------------[***]--------------
+        //Map-------[******]-----------------------
+        else if (startArray > endMap) {
+          nextLocationArray.push(arrayElement);
+        }
+        //Array-----[******]-----------------------
+        //Map-----------[*******]------------------
+        else if (startArray <= startMap && endArray >= startMap) {
+          nextLocationArray.push([startArray, startMap - startArray]);
+          nextLocationArray.push([
+            startMap + difference,
+            endArray - startMap + 1,
+          ]);
+        }
         //Array----------------[*******]---------------
         //Map---------------[*******]------------------
-        if (startArray <= endMap && endArray >= endMap) {
-          console.log(true);
+        else if (startArray <= endMap && endArray >= endMap) {
+          nextLocationArray.push([
+            startArray + difference,
+            endMap - startArray + 1,
+          ]);
+          nextLocationArray.push([endMap + 1, endArray - endMap + 1]);
+        }
+        //Array-----[*****************]-------------------
+        //Map------------[*******]------------------------
+        else if (startArray <= startMap && endArray >= endMap) {
+          nextLocationArray.push([startArray, startMap - startArray]);
+          nextLocationArray.push([
+            startMap + difference,
+            endMap - startMap + 1,
+          ]);
+          nextLocationArray.push([endMap + 1, endArray - endMap]);
         }
       });
     });
-    return [...new Set(nextLocationArray)];
+    return nextLocationArray;
   }
 
   function newInitialSeedArray(seedArray) {
