@@ -330,86 +330,126 @@ function part1() {
 
 //Map structure [destination, source, range]
 function part2() {
+  //-----------------NEW APPROACH----------------------
   const newSeedArray = [...newInitialSeedArray(seedArray)];
-  let nextLocationArray = getNewLocation(newSeedArray, seedToSoilMap);
-  nextLocationArray = getNewLocation(nextLocationArray, soilToFertilizerMap);
-  nextLocationArray = getNewLocation(nextLocationArray, fertilizerToWaterMap);
-  nextLocationArray = getNewLocation(nextLocationArray, waterToLightMap);
-  nextLocationArray = getNewLocation(nextLocationArray, lightToTemperatureMap);
-  nextLocationArray = getNewLocation(
-    nextLocationArray,
-    temperatureToHumidityMap
-  );
-  nextLocationArray = getNewLocation(nextLocationArray, humidityToLocationMap);
+  const sortedSeedToSoilMap = arraySort(seedToSoilMap);
+  const sortedSoilToFertilizerMap = arraySort(soilToFertilizerMap);
+  const sortedFertilizerToWaterMap = arraySort(fertilizerToWaterMap);
+  const sortedWaterToLightMap = arraySort(waterToLightMap);
+  const sortedLightToTemperatureMap = arraySort(lightToTemperatureMap);
+  const sortedTemperatureToHumidityMap = arraySort(temperatureToHumidityMap);
+  const sortedHumidityToLocationMap = arraySort(humidityToLocationMap);
 
   let x = 0;
-  let answer = Number.MAX_SAFE_INTEGER;
-
-  while (x < nextLocationArray.length) {
-    answer =
-      nextLocationArray[x][0] < answer ? nextLocationArray[x][0] : answer;
+  let found = false;
+  while (x < humidityToLocationMap.length && !found) {
+    let y = parseInt(humidityToLocationMap[x][1]);
+    let max =
+      parseInt(humidityToLocationMap[x][1]) +
+      parseInt(humidityToLocationMap[x][2]) -
+      1;
+    z = 0;
+    while (z < temperatureToHumidityMap.length && !found) {
+      z++;
+    }
     x++;
   }
 
-  console.log(answer);
+  function arraySort(givenArray) {
+    array = [...givenArray];
 
-  function getNewLocation(searchArray, searchMap) {
-    let nextLocationArray = [];
-    searchArray.forEach((arrayElement) => {
-      searchMap.forEach((mapElement) => {
-        let startArray = arrayElement[0];
-        let endArray = arrayElement[0] + arrayElement[1] - 1;
-        let startMap = parseInt(mapElement[1]);
-        let endMap = parseInt(mapElement[1]) + parseInt(mapElement[2]) - 1;
-        let difference = parseInt(mapElement[0]) - parseInt(mapElement[1]);
+    c = 0;
 
-        //Array---[***]---------------------------------------------------
-        //Map------------[******]-----------------------------------------
-        if (endArray < startMap) {
-          nextLocationArray.push(arrayElement);
-        }
-        //Array--------[***]----------------
-        //Map-------[*********}-------------
-        else if (startArray >= startMap && endArray <= endMap) {
-          nextLocationArray.push([startArray + difference, arrayElement[1]]);
-        }
-        //Array-----------------[***]--------------
-        //Map-------[******]-----------------------
-        else if (startArray > endMap) {
-          nextLocationArray.push(arrayElement);
-        }
-        //Array-----[******]-----------------------
-        //Map-----------[*******]------------------
-        else if (startArray <= startMap && endArray >= startMap) {
-          nextLocationArray.push([startArray, startMap - startArray]);
-          nextLocationArray.push([
-            startMap + difference,
-            endArray - startMap + 1,
-          ]);
-        }
-        //Array----------------[*******]---------------
-        //Map---------------[*******]------------------
-        else if (startArray <= endMap && endArray >= endMap) {
-          nextLocationArray.push([
-            startArray + difference,
-            endMap - startArray + 1,
-          ]);
-          nextLocationArray.push([endMap + 1, endArray - endMap + 1]);
-        }
-        //Array-----[*****************]-------------------
-        //Map------------[*******]------------------------
-        else if (startArray <= startMap && endArray >= endMap) {
-          nextLocationArray.push([startArray, startMap - startArray]);
-          nextLocationArray.push([
-            startMap + difference,
-            endMap - startMap + 1,
-          ]);
-          nextLocationArray.push([endMap + 1, endArray - endMap]);
-        }
-      });
+    array.sort(function (a, b) {
+      if (a[c] === b[c]) {
+        return 0;
+      } else {
+        return a[c] < b[c] ? -1 : 1;
+      }
     });
-    return nextLocationArray;
+    return array;
   }
+
+  //--------------OLD APPROACH-------------------------------------------
+  // let nextLocationArray = getNewLocation(newSeedArray, seedToSoilMap);
+  // nextLocationArray = getNewLocation(nextLocationArray, soilToFertilizerMap);
+  // nextLocationArray = getNewLocation(nextLocationArray, fertilizerToWaterMap);
+  // nextLocationArray = getNewLocation(nextLocationArray, waterToLightMap);
+  // nextLocationArray = getNewLocation(nextLocationArray, lightToTemperatureMap);
+  // nextLocationArray = getNewLocation(
+  //   nextLocationArray,
+  //   temperatureToHumidityMap
+  // );
+  // nextLocationArray = getNewLocation(nextLocationArray, humidityToLocationMap);
+
+  // let x = 0;
+  // let answer = Number.MAX_SAFE_INTEGER;
+
+  // while (x < nextLocationArray.length) {
+  //   answer =
+  //     nextLocationArray[x][0] < answer ? nextLocationArray[x][0] : answer;
+  //   x++;
+  // }
+
+  // console.log(answer);
+
+  // function getNewLocation(searchArray, searchMap) {
+  //   let nextLocationArray = [];
+  //   searchArray.forEach((arrayElement) => {
+  //     searchMap.forEach((mapElement) => {
+  //       let startArray = arrayElement[0];
+  //       let endArray = arrayElement[0] + arrayElement[1] - 1;
+  //       let startMap = parseInt(mapElement[1]);
+  //       let endMap = parseInt(mapElement[1]) + parseInt(mapElement[2]) - 1;
+  //       let difference = parseInt(mapElement[0]) - parseInt(mapElement[1]);
+
+  //       //Array---[***]---------------------------------------------------
+  //       //Map------------[******]-----------------------------------------
+  //       if (endArray < startMap) {
+  //         nextLocationArray.push(arrayElement);
+  //       }
+  //       //Array--------[***]----------------
+  //       //Map-------[*********}-------------
+  //       else if (startArray >= startMap && endArray <= endMap) {
+  //         nextLocationArray.push([startArray + difference, arrayElement[1]]);
+  //       }
+  //       //Array-----------------[***]--------------
+  //       //Map-------[******]-----------------------
+  //       else if (startArray > endMap) {
+  //         nextLocationArray.push(arrayElement);
+  //       }
+  //       //Array-----[******]-----------------------
+  //       //Map-----------[*******]------------------
+  //       else if (startArray <= startMap && endArray >= startMap) {
+  //         nextLocationArray.push([startArray, startMap - startArray]);
+  //         nextLocationArray.push([
+  //           startMap + difference,
+  //           endArray - startMap + 1,
+  //         ]);
+  //       }
+  //       //Array----------------[*******]---------------
+  //       //Map---------------[*******]------------------
+  //       else if (startArray <= endMap && endArray >= endMap) {
+  //         nextLocationArray.push([
+  //           startArray + difference,
+  //           endMap - startArray + 1,
+  //         ]);
+  //         nextLocationArray.push([endMap + 1, endArray - endMap + 1]);
+  //       }
+  //       //Array-----[*****************]-------------------
+  //       //Map------------[*******]------------------------
+  //       else if (startArray <= startMap && endArray >= endMap) {
+  //         nextLocationArray.push([startArray, startMap - startArray]);
+  //         nextLocationArray.push([
+  //           startMap + difference,
+  //           endMap - startMap + 1,
+  //         ]);
+  //         nextLocationArray.push([endMap + 1, endArray - endMap]);
+  //       }
+  //     });
+  //   });
+  //   return nextLocationArray;
+  // }
 
   function newInitialSeedArray(seedArray) {
     let tempArray = [];
