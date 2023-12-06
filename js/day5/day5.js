@@ -305,7 +305,7 @@ function part2() {
     nextLocationArray,
     temperatureToHumidityMap
   );
-  nextLocationArray = getLastLocation(nextLocationArray, humidityToLocationMap);
+  nextLocationArray = getNewLocation(nextLocationArray, humidityToLocationMap);
 
   let x = 0;
   let answer = Number.MAX_SAFE_INTEGER;
@@ -321,9 +321,10 @@ function part2() {
   function getNewLocation(searchArray, searchMap) {
     let nextLocationArray = [];
     searchArray.forEach((arrayElement) => {
+      let tempArray = [];
+      let startArray = arrayElement[0];
+      let endArray = arrayElement[0] + arrayElement[1] - 1;
       searchMap.forEach((mapElement) => {
-        let startArray = arrayElement[0];
-        let endArray = arrayElement[0] + arrayElement[1] - 1;
         let startMap = parseInt(mapElement[1]);
         let endMap = parseInt(mapElement[1]) + parseInt(mapElement[2]) - 1;
         let difference = parseInt(mapElement[0]) - parseInt(mapElement[1]);
@@ -331,109 +332,45 @@ function part2() {
         //Array---[***]---------------------------------------------------
         //Map------------[******]-----------------------------------------
         if (endArray < startMap) {
-          nextLocationArray.push(arrayElement);
+          tempArray.push(arrayElement);
         }
         //Array--------[***]----------------
         //Map-------[*********}-------------
         else if (startArray >= startMap && endArray <= endMap) {
-          nextLocationArray.push([startArray + difference, arrayElement[1]]);
+          tempArray.push([startArray + difference, arrayElement[1]]);
         }
         //Array-----------------[***]--------------
         //Map-------[******]-----------------------
         else if (startArray > endMap) {
-          nextLocationArray.push(arrayElement);
+          tempArray.push(arrayElement);
         }
         //Array-----[******]-----------------------
         //Map-----------[*******]------------------
         else if (startArray <= startMap && endArray >= startMap) {
-          nextLocationArray.push([startArray, startMap - startArray]);
-          nextLocationArray.push([
-            startMap + difference,
-            endArray - startMap + 1,
-          ]);
+          tempArray.push([startArray, startMap - startArray]);
+          tempArray.push([startMap + difference, endArray - startMap + 1]);
         }
         //Array----------------[*******]---------------
         //Map---------------[*******]------------------
         else if (startArray <= endMap && endArray >= endMap) {
-          nextLocationArray.push([
-            startArray + difference,
-            endMap - startArray + 1,
-          ]);
-          nextLocationArray.push([endMap + 1, endArray - endMap + 1]);
+          tempArray.push([startArray + difference, endMap - startArray + 1]);
+          tempArray.push([endMap + 1, endArray - endMap + 1]);
         }
         //Array-----[*****************]-------------------
         //Map------------[*******]------------------------
         else if (startArray <= startMap && endArray >= endMap) {
-          nextLocationArray.push([startArray, startMap - startArray]);
-          nextLocationArray.push([
-            startMap + difference,
-            endMap - startMap + 1,
-          ]);
-          nextLocationArray.push([endMap + 1, endArray - endMap]);
+          tempArray.push([startArray, startMap - startArray]);
+          tempArray.push([startMap + difference, endMap - startMap + 1]);
+          tempArray.push([endMap + 1, endArray - endMap]);
         } else {
           console.log('Jag ska aldrig aktiveras');
         }
       });
-    });
-    return [...new Set(nextLocationArray)];
-  }
 
-  function getLastLocation(searchArray, searchMap) {
-    let nextLocationArray = [];
-    searchArray.forEach((arrayElement) => {
-      searchMap.forEach((mapElement) => {
-        let startArray = arrayElement[0];
-        let endArray = arrayElement[0] + arrayElement[1] - 1;
-        let startMap = parseInt(mapElement[1]);
-        let endMap = parseInt(mapElement[1]) + parseInt(mapElement[2]) - 1;
-        let difference = parseInt(mapElement[0]) - parseInt(mapElement[1]);
-
-        //Array---[***]---------------------------------------------------
-        //Map------------[******]-----------------------------------------
-        if (endArray < startMap) {
-          //nextLocationArray.push(arrayElement);
-        }
-        //Array--------[***]----------------
-        //Map-------[*********}-------------
-        else if (startArray >= startMap && endArray <= endMap) {
-          nextLocationArray.push([startArray + difference, arrayElement[1]]);
-        }
-        //Array-----------------[***]--------------
-        //Map-------[******]-----------------------
-        else if (startArray > endMap) {
-          //nextLocationArray.push(arrayElement);
-        }
-        //Array-----[******]-----------------------
-        //Map-----------[*******]------------------
-        else if (startArray <= startMap && endArray >= startMap) {
-          //nextLocationArray.push([startArray, startMap - startArray]);
-          nextLocationArray.push([
-            startMap + difference,
-            endArray - startMap + 1,
-          ]);
-        }
-        //Array----------------[*******]---------------
-        //Map---------------[*******]------------------
-        else if (startArray <= endMap && endArray >= endMap) {
-          nextLocationArray.push([
-            startArray + difference,
-            endMap - startArray + 1,
-          ]);
-          //nextLocationArray.push([endMap + 1, endArray - endMap + 1]);
-        }
-        //Array-----[*****************]-------------------
-        //Map------------[*******]------------------------
-        else if (startArray <= startMap && endArray >= endMap) {
-          //nextLocationArray.push([startArray, startMap - startArray]);
-          nextLocationArray.push([
-            startMap + difference,
-            endMap - startMap + 1,
-          ]);
-          //nextLocationArray.push([endMap + 1, endArray - endMap]);
-        }
-      });
+      tempArray = [...new Set(tempArray)];
+      nextLocationArray.push(...tempArray);
     });
-    return [...new Set(nextLocationArray)];
+    return nextLocationArray;
   }
 
   function newInitialSeedArray(seedArray) {
