@@ -1,9 +1,22 @@
-const textInput = `32T3K 765
-T55J5 684
-KK677 28
-KK688 23
-KTJJT 220
-QQQJA 483`;
+const textInput = `2345A 1
+Q2KJJ 13
+Q2Q2Q 19
+T3T3J 17
+T3Q33 11
+2345J 3
+J345A 2
+32T3K 5
+T55J5 29
+KK677 7
+KTJJT 34
+QQQJA 31
+JJJJJ 37
+JAAAA 43
+AAAAJ 59
+AAAAA 61
+2AAAA 23
+2JJJJ 53
+JJJJ2 41`;
 
 //Kind of arrays
 let fiveKind = [];
@@ -17,11 +30,11 @@ let highCard = [];
 //Answer shoud be 6440
 
 const arrayInput = textInput.split('\n');
+
 //Put together array of hands with sorted cards
 for (let x = 0; x < arrayInput.length; x++) {
   arrayInput[x] = arrayInput[x].split(' ');
   arrayInput[x][1] = parseInt(arrayInput[x][1]);
-  arrayInput[x] = arrayInput[x];
 
   //Categorize hands
   if (isFiveKind(arrayInput[x])) {
@@ -40,13 +53,47 @@ for (let x = 0; x < arrayInput.length; x++) {
     highCard.push(arrayInput[x]);
   }
 }
-sortHands(twoPair);
+
+fiveKind = fiveKind.length > 0 ? sortHands(fiveKind) : [];
+// fourKind = fourKind.length > 0 ? sortHands(fourKind) : [];
+// fullHouse = fullHouse.length > 0 ? sortHands(fullHouse) : [];
+// threeKind = threeKind.length > 0 ? sortHands(threeKind) : [];
+// twoPair = twoPair.length > 0 ? sortHands(twoPair) : [];
+// pair = pair.length > 0 ? sortHands(pair) : [];
+// highCard = highCard.length > 0 ? sortHands(highCard) : [];
+
+let rank =
+  fiveKind.length +
+  fourKind.length +
+  fullHouse.length +
+  threeKind.length +
+  twoPair.length +
+  pair.length +
+  highCard.length;
+let answer = 0;
+
+// countAnswer(fiveKind);
+countAnswer(fourKind);
+// countAnswer(fullHouse);
+// countAnswer(threeKind);
+// countAnswer(twoPair);
+// countAnswer(pair);
+// countAnswer(highCard);
+function countAnswer(arr) {
+  if (arr.length > 0) {
+    arr.forEach((element) => {
+      answer += element[1] * rank;
+      rank--;
+    });
+  }
+}
 
 //Categorize Functions
 function isFiveKind(cards) {
   tempCards = sortCards(cards);
   return tempCards[0].match(/(.)\1{4}/) ? true : false;
 }
+37;
 
 function isFourKind(cards) {
   tempCards = sortCards(cards);
@@ -80,31 +127,31 @@ function sortCards(cards) {
   return temp;
 }
 
+//Nånting är väldigt fel här!!!
 function sortHands(arrayOfHands) {
-  convertedArray = [];
+  console.log(arrayOfHands);
+  let convertedArray = [];
+  let sortedArray = [];
   //Build converted array [cards in array by value, index number in original array]
   let x = 0; //Track which from arrayOfHands is converted
   arrayOfHands.forEach((element) => {
     convertedArray.push([element[0].split(''), element[1]]);
     x++;
   });
-  let sortedArray = [];
-  let y = 0;
-  while (y < convertedArray.length) {
-    let highest = convertedArray[y];
-    for (let z = y; z < convertedArray.length; z++) {
-      console.log(convertedArray[z], z);
-      if (z + 1 < convertedArray.length) {
-        if (isHighestHand(convertedArray[z][0], convertedArray[z + 1][0])) {
-          console.log('true');
-          highest = [...convertedArray[z]];
-        }
+  while (convertedArray.length > 1) {
+    let y = 0;
+    let highest = 1;
+    while (y < convertedArray.length - 1) {
+      if (isHighestHand(convertedArray[y][0], convertedArray[y + 1][0])) {
+        highest = y;
       }
+      y++;
     }
-    sortedArray.push(...highest);
-    console.log(sortedArray);
-    y++;
+    sortedArray.push(...convertedArray.splice(highest, 1));
   }
+  sortedArray.push([...convertedArray[0]]);
+
+  return sortedArray;
 }
 
 function isHighestHand(a, b) {
@@ -114,8 +161,9 @@ function isHighestHand(a, b) {
       return true;
     } else if (isLowerThan(a[x], b[x])) {
       return false;
+    } else if (isEqual(a[x], b[x])) {
+      x++;
     }
-    x++;
   }
   return false;
 }
@@ -160,8 +208,10 @@ function convertLetterToValueIfNeeded(a) {
         break;
       case 'J':
         return 11;
+        break;
       case 'T':
         return 10;
+        break;
     }
   }
 }
