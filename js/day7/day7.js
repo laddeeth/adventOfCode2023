@@ -1,6 +1,7 @@
 const textInput = `32T3K 765
 T55J5 684
 KK677 28
+KK688 23
 KTJJT 220
 QQQJA 483`;
 
@@ -16,7 +17,6 @@ let highCard = [];
 //Answer shoud be 6440
 
 const arrayInput = textInput.split('\n');
-
 //Put together array of hands with sorted cards
 for (let x = 0; x < arrayInput.length; x++) {
   arrayInput[x] = arrayInput[x].split(' ');
@@ -40,9 +40,8 @@ for (let x = 0; x < arrayInput.length; x++) {
     highCard.push(arrayInput[x]);
   }
 }
-
 sortHands(twoPair);
-console.log(twoPair);
+
 //Categorize Functions
 function isFiveKind(cards) {
   tempCards = sortCards(cards);
@@ -76,32 +75,49 @@ function isPair(cards) {
 
 //Sorting Functions
 function sortCards(cards) {
-  cards[0] = cards[0].split('').sort().join('');
-  return cards;
+  let temp = [...cards];
+  temp[0] = temp[0].split('').sort().join('');
+  return temp;
 }
 
 function sortHands(arrayOfHands) {
-  sortedArray = [];
   convertedArray = [];
-
   //Build converted array [cards in array by value, index number in original array]
+  let x = 0; //Track which from arrayOfHands is converted
   arrayOfHands.forEach((element) => {
     convertedArray.push([element[0].split(''), element[1]]);
+    x++;
   });
-  console.log(convertedArray);
+  let sortedArray = [];
+  let y = 0;
+  while (y < convertedArray.length) {
+    let highest = convertedArray[y];
+    for (let z = y; z < convertedArray.length; z++) {
+      console.log(convertedArray[z], z);
+      if (z + 1 < convertedArray.length) {
+        if (isHighestHand(convertedArray[z][0], convertedArray[z + 1][0])) {
+          console.log('true');
+          highest = [...convertedArray[z]];
+        }
+      }
+    }
+    sortedArray.push(...highest);
+    console.log(sortedArray);
+    y++;
+  }
 }
 
-function returnHighestHand(a, b) {
+function isHighestHand(a, b) {
   let x = 0;
   while (x < 5) {
     if (isHigherThan(a[x], b[x])) {
-      return a;
-    } else if (isHigherThan(b[x], a[x])) {
-      return b;
+      return true;
+    } else if (isLowerThan(a[x], b[x])) {
+      return false;
     }
     x++;
   }
-  return a;
+  return false;
 }
 
 function isLowerThan(a, b) {
