@@ -88,21 +88,7 @@ function sortHands(arrayOfHands) {
   arrayOfHands.forEach((element) => {
     convertedArray.push([element[0].split(''), element[1]]);
   });
-
-  console.log(
-    [
-      [['J', '7', '7', 'K', 'K'], 28],
-      [['J', 'J', '7', 'K', 'K'], 220],
-    ].sort(sortFunction)
-  );
-  //Create a recursive loop here!!!!!!!!!!!
-  function sortFunction(a, b) {
-    if (isEqual(a[0], b[0])) {
-      return 0;
-    } else {
-      return isLowerThan(a[0], b[0]) ? 1 : -1;
-    }
-  }
+  console.log(convertedArray);
 }
 
 function returnHighestHand(a, b) {
