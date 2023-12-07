@@ -80,14 +80,31 @@ function sortCards(cards) {
   return cards;
 }
 
-function sortHands(arrayOfHands) {
-  convertedArray = [];
+function sortHands(arrayOfHands) {}
 
-  let x = 0;
-  //Build converted array [cards in array by value, index number in original array]
-  arrayOfHands.forEach((element) => {
-    convertedArray.push([element[0].split(''), x]);
-    x++;
-  });
-  console.log(convertedArray);
+isLowerThan(3, 4);
+function isLowerThan(a, b) {
+  //console.log(a, b);
+}
+
+function convertLetterToValueIfNeeded(a) {
+  if (!isNaN(parseInt(a))) {
+    return parseInt(a);
+  } else {
+    switch (a) {
+      case 'A':
+        return 14;
+        break;
+      case 'K':
+        return 13;
+        break;
+      case 'Q':
+        return 12;
+        break;
+      case 'J':
+        return 11;
+      case 'T':
+        return 10;
+    }
+  }
 }
