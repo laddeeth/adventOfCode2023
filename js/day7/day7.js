@@ -42,7 +42,7 @@ for (let x = 0; x < arrayInput.length; x++) {
 }
 
 sortHands(twoPair);
-
+console.log(twoPair);
 //Categorize Functions
 function isFiveKind(cards) {
   tempCards = sortCards(cards);
@@ -80,11 +80,66 @@ function sortCards(cards) {
   return cards;
 }
 
-function sortHands(arrayOfHands) {}
+function sortHands(arrayOfHands) {
+  sortedArray = [];
+  convertedArray = [];
 
-isLowerThan(3, 4);
+  //Build converted array [cards in array by value, index number in original array]
+  arrayOfHands.forEach((element) => {
+    convertedArray.push([element[0].split(''), element[1]]);
+  });
+
+  console.log(
+    [
+      [['J', '7', '7', 'K', 'K'], 28],
+      [['J', 'J', '7', 'K', 'K'], 220],
+    ].sort(sortFunction)
+  );
+  //Create a recursive loop here!!!!!!!!!!!
+  function sortFunction(a, b) {
+    if (isEqual(a[0], b[0])) {
+      return 0;
+    } else {
+      return isLowerThan(a[0], b[0]) ? 1 : -1;
+    }
+  }
+}
+
+function returnHighestHand(a, b) {
+  let x = 0;
+  while (x < 5) {
+    if (isHigherThan(a[x], b[x])) {
+      return a;
+    } else if (isHigherThan(b[x], a[x])) {
+      return b;
+    }
+    x++;
+  }
+  return a;
+}
+
 function isLowerThan(a, b) {
-  //console.log(a, b);
+  if (convertLetterToValueIfNeeded(a) < convertLetterToValueIfNeeded(b)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function isEqual(a, b) {
+  if (convertLetterToValueIfNeeded(a) == convertLetterToValueIfNeeded(b)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function isHigherThan(a, b) {
+  if (convertLetterToValueIfNeeded(a) > convertLetterToValueIfNeeded(b)) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function convertLetterToValueIfNeeded(a) {
