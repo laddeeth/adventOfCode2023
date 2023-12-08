@@ -45,9 +45,9 @@ function part1() {
 function part2() {
   let instruction = 0;
   let steps = 0;
-  let allAtEnd = true;
   let keepLooping = true;
   while (keepLooping) {
+    let allAtEnd = true;
     startArray.forEach((element) => {
       element[1] = textObject['' + element[1]][instructions[instruction]];
       if (element[1][2] !== 'Z') {
@@ -60,6 +60,6 @@ function part2() {
     instruction++;
     instruction = instruction == instructions.length ? 0 : instruction;
     steps++;
+    console.log(steps);
   }
-  console.log(steps);
 }
