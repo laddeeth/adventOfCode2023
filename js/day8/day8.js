@@ -14,7 +14,8 @@ let instructions = textArray[0]
 
 let startArray = [];
 let textObject = {};
-textArray.splice(0, 2);
+startArray.splice(0, 2);
+console.log(startArray);
 textArray.forEach((element) => {
   textObject['' + element.substring(0, 3)] = [
     element.substring(7, 10),
@@ -24,6 +25,10 @@ textArray.forEach((element) => {
     ? startArray.push([element.substring(0, 3), element.substring(0, 3)])
     : false;
 });
+startArray.splice(0, 2);
+startArray.splice(0, 2);
+startArray.splice(2);
+console.log(startArray);
 
 part2();
 function part1() {
@@ -60,6 +65,6 @@ function part2() {
     instruction++;
     instruction = instruction == instructions.length ? 0 : instruction;
     steps++;
-    console.log(steps);
   }
+  console.log(steps);
 }

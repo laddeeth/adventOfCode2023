@@ -1,22 +1,6 @@
-const textInput = `2345A 1
-Q2KJJ 13
-Q2Q2Q 19
-T3T3J 17
-T3Q33 11
-2345J 3
-J345A 2
-32T3K 5
-T55J5 29
-KK677 7
-KTJJT 34
-QQQJA 31
-JJJJJ 37
-JAAAA 43
-AAAAJ 59
-AAAAA 61
-2AAAA 23
-2JJJJ 53
-JJJJ2 41`;
+const fs = require('fs');
+const buffer = fs.readFileSync(__dirname + '/input.txt');
+const textInput = buffer.toString();
 
 //Kind of arrays
 let fiveKind = [];
@@ -54,13 +38,14 @@ for (let x = 0; x < arrayInput.length; x++) {
   }
 }
 
-fiveKind = fiveKind.length > 0 ? sortHands(fiveKind) : [];
-// fourKind = fourKind.length > 0 ? sortHands(fourKind) : [];
-// fullHouse = fullHouse.length > 0 ? sortHands(fullHouse) : [];
-// threeKind = threeKind.length > 0 ? sortHands(threeKind) : [];
-// twoPair = twoPair.length > 0 ? sortHands(twoPair) : [];
-// pair = pair.length > 0 ? sortHands(pair) : [];
-// highCard = highCard.length > 0 ? sortHands(highCard) : [];
+sortHands(fiveKind);
+
+sortHands(fourKind);
+sortHands(fullHouse);
+sortHands(threeKind);
+sortHands(twoPair);
+sortHands(pair);
+sortHands(highCard);
 
 let rank =
   fiveKind.length +
@@ -72,13 +57,13 @@ let rank =
   highCard.length;
 let answer = 0;
 
-// countAnswer(fiveKind);
+countAnswer(fiveKind);
 countAnswer(fourKind);
-// countAnswer(fullHouse);
-// countAnswer(threeKind);
-// countAnswer(twoPair);
-// countAnswer(pair);
-// countAnswer(highCard);
+countAnswer(fullHouse);
+countAnswer(threeKind);
+countAnswer(twoPair);
+countAnswer(pair);
+countAnswer(highCard);
 function countAnswer(arr) {
   if (arr.length > 0) {
     arr.forEach((element) => {
@@ -88,12 +73,13 @@ function countAnswer(arr) {
   }
 }
 
+console.log(answer);
+
 //Categorize Functions
 function isFiveKind(cards) {
   tempCards = sortCards(cards);
   return tempCards[0].match(/(.)\1{4}/) ? true : false;
 }
-37;
 
 function isFourKind(cards) {
   tempCards = sortCards(cards);
@@ -129,31 +115,23 @@ function sortCards(cards) {
 
 //Nånting är väldigt fel här!!!
 function sortHands(arrayOfHands) {
-  console.log(arrayOfHands);
-  let convertedArray = [];
-  let sortedArray = [];
-  //Build converted array [cards in array by value, index number in original array]
-  let x = 0; //Track which from arrayOfHands is converted
-  arrayOfHands.forEach((element) => {
-    convertedArray.push([element[0].split(''), element[1]]);
-    x++;
-  });
-  while (convertedArray.length > 1) {
-    let y = 0;
-    let highest = 1;
-    while (y < convertedArray.length - 1) {
-      if (isHighestHand(convertedArray[y][0], convertedArray[y + 1][0])) {
-        highest = y;
+  return arrayOfHands.sort((a, b) => {
+    end = false;
+    let x = 0;
+    while (!end) {
+      if (isHighestHand(a[0][x], b[0][x])) {
+        return -1;
+      } else if (isHighestHand(b[0][x], a[0][x])) {
+        return 1;
+      } else {
+        x += x < a[0].length ? 1 : 0;
+        if (x == a[0].length) {
+          return 1;
+        }
       }
-      y++;
     }
-    sortedArray.push(...convertedArray.splice(highest, 1));
-  }
-  sortedArray.push([...convertedArray[0]]);
-
-  return sortedArray;
+  });
 }
-
 function isHighestHand(a, b) {
   let x = 0;
   while (x < 5) {
