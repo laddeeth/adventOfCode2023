@@ -38,42 +38,60 @@ for (let x = 0; x < arrayInput.length; x++) {
   }
 }
 
-sortHands(fiveKind);
+part2();
+function part1() {
+  sortHands(fiveKind);
 
-sortHands(fourKind);
-sortHands(fullHouse);
-sortHands(threeKind);
-sortHands(twoPair);
-sortHands(pair);
-sortHands(highCard);
+  sortHands(fourKind);
+  sortHands(fullHouse);
+  sortHands(threeKind);
+  sortHands(twoPair);
+  sortHands(pair);
+  sortHands(highCard);
 
-let rank =
-  fiveKind.length +
-  fourKind.length +
-  fullHouse.length +
-  threeKind.length +
-  twoPair.length +
-  pair.length +
-  highCard.length;
-let answer = 0;
+  let rank =
+    fiveKind.length +
+    fourKind.length +
+    fullHouse.length +
+    threeKind.length +
+    twoPair.length +
+    pair.length +
+    highCard.length;
+  let answer = 0;
 
-countAnswer(fiveKind);
-countAnswer(fourKind);
-countAnswer(fullHouse);
-countAnswer(threeKind);
-countAnswer(twoPair);
-countAnswer(pair);
-countAnswer(highCard);
-function countAnswer(arr) {
-  if (arr.length > 0) {
-    arr.forEach((element) => {
-      answer += element[1] * rank;
-      rank--;
-    });
+  countAnswer(fiveKind);
+  countAnswer(fourKind);
+  countAnswer(fullHouse);
+  countAnswer(threeKind);
+  countAnswer(twoPair);
+  countAnswer(pair);
+  countAnswer(highCard);
+  function countAnswer(arr) {
+    if (arr.length > 0) {
+      arr.forEach((element) => {
+        answer += element[1] * rank;
+        rank--;
+      });
+    }
   }
+  console.log(answer);
 }
 
-console.log(answer);
+function part2() {
+  fiveKind.forEach((element) => {
+    element[0] = element[0].replace('JJJJJ', 'AAAAA');
+  });
+  fourKind.forEach((element) => {
+    element[0] = element[0].replace('JJJJ', 'AAAA');
+  });
+  //fullhouse, replace all J to the other sign
+  threeKind.forEach((element) => {
+    element[0] = element[0].replace('JJJ', 'AAA');
+  });
+  //Two Pair, replace all J to the highest pair
+  //Onepair, replace j to the pair or if is the pair to the highest other card
+  //Highest Hand, replace J with the highest other card.
+}
 
 //Categorize Functions
 function isFiveKind(cards) {
@@ -113,7 +131,6 @@ function sortCards(cards) {
   return temp;
 }
 
-//Nånting är väldigt fel här!!!
 function sortHands(arrayOfHands) {
   return arrayOfHands.sort((a, b) => {
     end = false;
