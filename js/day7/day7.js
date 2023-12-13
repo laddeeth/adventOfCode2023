@@ -83,11 +83,12 @@ function part2() {
   });
   fourKind.forEach((element) => {
     element[0] = element[0].replace('JJJJ', 'AAAA');
+    let fourOf = element[0].match(/[^J]/);
+    element[0] = element[0].replace('J', fourOf[0]);
   });
   //fullhouse, replace all J to the other sign
-  threeKind.forEach((element) => {
-    element[0] = element[0].replace('JJJ', 'AAA');
-  });
+  fullHouse.forEach((element) => {});
+  threeKind.forEach((element) => {});
   //Two Pair, replace all J to the highest pair
   //Onepair, replace j to the pair or if is the pair to the highest other card
   //Highest Hand, replace J with the highest other card.
